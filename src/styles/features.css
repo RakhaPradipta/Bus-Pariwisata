@@ -1,0 +1,785 @@
+/* ==========================================================================
+   Jokam Trans — Fitur halaman beranda
+   Hasil pencarian, papan jadwal, kartu rute, armada, fasilitas, pariwisata.
+   ========================================================================== */
+
+/* --- Utilitas kecil ----------------------------------------------------- */
+
+.row {
+  display: flex;
+}
+
+.row-gap-2 {
+  gap: var(--sp-2);
+}
+
+.row-gap-3 {
+  gap: var(--sp-3);
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.tiny {
+  font-size: 0.72rem;
+}
+
+.subtle {
+  color: var(--text-subtle);
+}
+
+/* --- Hasil pencarian ------------------------------------------------------ */
+
+.results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.result-row {
+  display: grid;
+  grid-template-columns: 76px minmax(180px, 1.4fr) minmax(170px, 1.2fr) auto auto;
+  gap: var(--sp-4);
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4) var(--sp-5);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.result-row:hover {
+  border-color: var(--accent-400);
+  box-shadow: var(--shadow-md);
+}
+
+.result-row__time {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+}
+
+.result-row__depart {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+.result-row__arrive {
+  font-size: 0.85rem;
+  color: var(--text-subtle);
+}
+
+.result-row__route,
+.result-row__bus,
+.result-row__seats,
+.result-row__price {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.result-row__city {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--heading);
+}
+
+.result-row__arrow {
+  color: var(--accent-400);
+  font-weight: 800;
+}
+
+.result-row__bus strong {
+  font-size: 0.9rem;
+  color: var(--heading);
+}
+
+.result-row__meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.result-row__facilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+.result-row__facilities .badge {
+  font-size: 0.62rem;
+  padding: 2px 7px;
+}
+
+.result-row__seats .is-available {
+  color: var(--success-700);
+}
+
+.result-row__seats .is-full {
+  color: var(--danger-700);
+}
+
+.result-row__price {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.empty__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--heading);
+}
+
+/* --- Jadwal hari ini: dua baris kartu berjalan -------------------------------- */
+
+.marquee-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  overflow: hidden;
+}
+
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 70s linear infinite;
+}
+
+.marquee--right .marquee__track {
+  animation-name: marquee-right;
+}
+
+.marquee__track--static {
+  animation: none;
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track,
+  .brand-ticker__track {
+    animation: none;
+  }
+}
+
+.sched-card {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 288px;
+  margin-right: var(--sp-4);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  transition: border-color 0.15s ease;
+}
+
+.sched-card:hover {
+  border-color: var(--accent-400);
+}
+
+.sched-card__time {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+.sched-card__route {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.98rem;
+  color: var(--heading);
+}
+
+.sched-card__route i {
+  color: var(--accent-400);
+  font-style: normal;
+}
+
+.sched-card__bus {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.sched-card__foot {
+  margin-top: var(--sp-1);
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--line);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.sched-card__price {
+  margin-left: auto;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent-300);
+  white-space: nowrap;
+}
+
+.sched-card__skeleton {
+  display: block;
+  flex-shrink: 0;
+  width: 288px;
+  height: 128px;
+  margin-right: var(--sp-4);
+}
+
+/* --- Tulisan berjalan JOKAM TRANS (penghubung home → jadwal) -------------------- */
+
+.brand-ticker {
+  overflow: hidden;
+  background: var(--surface);
+  border-block: 1px solid var(--line-strong);
+  padding-block: var(--sp-4);
+}
+
+.brand-ticker__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 30s linear infinite;
+}
+
+.brand-ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-5);
+  padding-right: var(--sp-5);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+  letter-spacing: 0.06em;
+  color: var(--heading);
+  white-space: nowrap;
+}
+
+.brand-ticker__item:nth-child(even) {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent-400);
+}
+
+.brand-ticker__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--r-full);
+  background: var(--accent-400);
+  flex-shrink: 0;
+}
+
+/* --- Kartu rute populer (berfoto) -------------------------------------------- */
+
+.route-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--sp-4);
+}
+
+.route-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  text-align: left;
+  cursor: pointer;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  transition: border-color 0.15s ease, transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.16s ease;
+}
+
+.route-card:hover {
+  border-color: var(--accent-400);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.route-card__photo {
+  position: relative;
+  display: block;
+}
+
+.route-card__photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.route-card__photo .photo-chip {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.route-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--sp-4) var(--sp-5) var(--sp-3);
+}
+
+.route-card__cities {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.02rem;
+  color: var(--heading);
+}
+
+.route-card__cities span {
+  color: var(--accent-400);
+}
+
+.route-card__meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.route-card__price {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.route-card__price strong {
+  color: var(--accent-300);
+}
+
+.route-card__foot {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-5) var(--sp-4);
+  border-top: 1px solid var(--line);
+}
+
+.route-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-400);
+  white-space: nowrap;
+}
+
+.route-card--skeleton {
+  cursor: default;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+}
+
+.route-card--skeleton:hover {
+  border-color: var(--line-strong);
+  transform: none;
+  box-shadow: none;
+}
+
+.route-card__skeleton-photo {
+  display: block;
+  height: 110px;
+}
+
+.route-card__skeleton-line {
+  display: block;
+  height: 12px;
+  width: 75%;
+}
+
+.route-card__skeleton-line--short {
+  width: 45%;
+}
+
+/* --- Deretan armada ---------------------------------------------------------- */
+
+.fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--sp-5);
+}
+
+.fleet-card {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.15s ease, box-shadow 0.16s ease;
+}
+
+.fleet-card:hover {
+  border-color: var(--accent-400);
+  box-shadow: var(--shadow-md);
+}
+
+.fleet-card__figure {
+  margin: 0;
+  position: relative;
+}
+
+.fleet-card__figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.fleet-card__figure .photo-credit {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 6px 10px;
+  background: linear-gradient(transparent, rgba(5, 5, 5, 0.85));
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.fleet-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5) var(--sp-5);
+  flex: 1;
+}
+
+.fleet-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.fleet-card__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--heading);
+}
+
+.fleet-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.fleet-card__seats {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.fleet-card__skeleton-photo {
+  display: block;
+  height: 160px;
+}
+
+.fleet-card__skeleton-line {
+  display: block;
+  height: 12px;
+  width: 70%;
+}
+
+/* --- Fasilitas ----------------------------------------------------------------- */
+
+.facility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--sp-3);
+}
+
+.facility-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  transition: border-color 0.15s ease;
+}
+
+.facility-card:hover {
+  border-color: var(--accent-400);
+}
+
+.facility-card__icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  background: var(--tint-accent);
+  color: var(--tint-accent-fg);
+  margin-bottom: var(--sp-1);
+}
+
+.facility-card__name {
+  font-size: 0.92rem;
+  color: var(--heading);
+}
+
+.facility-card__classes {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.facility-card__skeleton {
+  display: block;
+  height: 96px;
+}
+
+/* --- Fakta kebijangan ----------------------------------------------------------- */
+
+.fact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--sp-4);
+}
+
+.fact-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+}
+
+.fact-card__icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent-400);
+}
+
+.fact-card__title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+.fact-card__text {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+/* --- Pariwisata & carter ---------------------------------------------------------- */
+
+.tourism {
+  background-color: var(--brand-900);
+  background-size: cover;
+  background-position: center;
+  border-block: 1px solid var(--line-strong);
+  padding-block: var(--sp-8);
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+
+.tourism__inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--sp-7);
+  align-items: center;
+}
+
+.tourism__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* Eyebrow sudah punya margin bawah dari .section__eyebrow — di dalam grid
+   dengan gap, margin itu menumpuk jadi jarak ganda. */
+.tourism__copy .section__eyebrow {
+  margin-bottom: 0;
+}
+
+.tourism__title {
+  margin: 0;
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--heading);
+}
+
+.tourism__lead {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.tourism__classes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.tourism__classes-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin-right: var(--sp-1);
+}
+
+.tourism__contact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-xl);
+  padding: var(--sp-5);
+  box-shadow: var(--shadow-lg);
+}
+
+.tourism__contact-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--heading);
+}
+
+.tourism__contact-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.contact-list {
+  list-style: none;
+  margin: var(--sp-1) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.contact-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.contact-list a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.contact-list a:hover {
+  color: var(--accent-400);
+}
+
+.contact-list__icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  color: var(--accent-400);
+}
+
+/* --- Responsif --------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .result-row {
+    grid-template-columns: 76px 1fr auto;
+  }
+
+  .result-row__bus {
+    grid-column: 2 / -1;
+  }
+
+  .tourism__inner {
+    grid-template-columns: 1fr;
+    gap: var(--sp-6);
+  }
+}
+
+@media (max-width: 620px) {
+  .result-row {
+    grid-template-columns: 1fr;
+  }
+
+  .result-row__price {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .route-card__foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-2);
+  }
+}

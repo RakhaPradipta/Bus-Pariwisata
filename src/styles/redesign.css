@@ -1,0 +1,481 @@
+/* ==========================================================================
+   Jokam Trans — REDESIGN 2026 ("Terminal Modern")
+   Lapisan visual baru di atas token/primitif/layout/fitur lama.
+   Prinsip:
+   - Identitas tetap: kanvas #050505, hijau pinus, limau #95FF50.
+   - Semua angka tetap dari database — file ini hanya visual.
+   - Mobile-first di dalam file responsive.css; file ini berisi
+     peningkatan tampilan untuk semua ukuran layar.
+   ========================================================================== */
+
+/* --- Kanvas: kedalaman halus tanpa gradasi dekoratif berlebihan -------- */
+body {
+  background:
+    radial-gradient(900px 380px at 85% -80px, rgba(149, 255, 80, 0.07), transparent 60%),
+    radial-gradient(760px 340px at 8% 240px, rgba(63, 130, 102, 0.12), transparent 60%),
+    var(--bg);
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent-400);
+  color: var(--on-accent);
+}
+
+/* --- Fokus keyboard yang jelas (aksesibilitas) ------------------------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent-400);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+
+/* --- Container: napas lebih lega di layar besar ------------------------ */
+.container {
+  max-width: min(var(--container), 100% - 2 * var(--sp-5));
+}
+
+/* --- Header: lebih ramping, blur, garis livery tetap ------------------- */
+.site-header {
+  background: color-mix(in srgb, #051f16 88%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+}
+
+.brand__mark {
+  box-shadow: 0 0 0 1px rgba(149, 255, 80, 0.45), 0 6px 18px rgba(149, 255, 80, 0.22);
+}
+
+.site-nav__link {
+  position: relative;
+}
+
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--white);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-toggle:hover {
+  border-color: var(--accent-400);
+  color: var(--accent-400);
+}
+
+.nav-toggle__bars {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 20px;
+}
+
+.nav-toggle__bars span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.22s ease, opacity 0.18s ease;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Label pendek tombol header hanya untuk ponsel (≤560px di responsive.css). */
+.header-cta__short {
+  display: none;
+}
+
+.header-cta__full {
+  display: inline;
+}
+
+/* --- Hero: panggung sinematik ------------------------------------------ */
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(3rem, 7vw, 5.5rem) clamp(2rem, 5vw, 4rem);
+  border-bottom: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-strong) 20%, var(--line-strong) 80%, transparent);
+}
+
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  border: 1px solid rgba(149, 255, 80, 0.4);
+  border-radius: var(--r-full);
+  background: rgba(149, 255, 80, 0.08);
+  font-size: 0.7rem;
+}
+
+.hero__eyebrow::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-400);
+  box-shadow: 0 0 10px var(--accent-400);
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+
+.hero__title {
+  font-size: clamp(2rem, 5.2vw, 3.4rem);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  max-width: 24ch;
+}
+
+.hero__title .hl {
+  color: var(--accent-400);
+}
+
+.hero__lead {
+  font-size: clamp(0.95rem, 1.6vw, 1.08rem);
+  color: var(--ink-600);
+  max-width: 60ch;
+}
+
+/* --- Panel pencarian: kartu kaca gelap --------------------------------- */
+.search-panel {
+  position: relative;
+  background: color-mix(in srgb, #101014 86%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  padding: clamp(1rem, 2.6vw, 1.5rem);
+}
+
+.search-panel::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(149, 255, 80, 0.5), transparent 30%, transparent 70%, rgba(63, 130, 102, 0.5));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.search-panel .field__label {
+  color: var(--accent-200);
+}
+
+.search-panel .select,
+.search-panel .input {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* --- Statistik: kartu KPI ---------------------------------------------- */
+.stats {
+  border-top: none;
+  padding-top: 0;
+  gap: var(--sp-3);
+}
+
+.stats__item {
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4) var(--sp-4);
+  overflow: hidden;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.stats__item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent-400);
+  opacity: 0.9;
+}
+
+.stats__item:hover {
+  border-color: rgba(149, 255, 80, 0.5);
+  transform: translateY(-2px);
+}
+
+.stats__num {
+  font-variant-numeric: tabular-nums;
+}
+
+.stats__label {
+  color: var(--text-muted);
+}
+
+/* --- Kepala section: bernomor, beraturan ------------------------------- */
+.section {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.section__head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 80ch;
+}
+
+.section__eyebrow {
+  font-size: 0.7rem;
+  padding: 5px 12px;
+  border: 1px solid rgba(149, 255, 80, 0.35);
+  border-radius: var(--r-full);
+  background: rgba(149, 255, 80, 0.07);
+  width: fit-content;
+}
+
+.section__eyebrow::before {
+  width: 16px;
+}
+
+.section__head h2 {
+  font-size: clamp(1.45rem, 3.2vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.section__sub {
+  color: var(--text-muted);
+}
+
+/* --- Kartu hasil pencarian: baris premium ------------------------------- */
+.result-row {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015)), var(--surface);
+}
+
+.result-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent-400);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.result-row:hover::before {
+  opacity: 1;
+}
+
+.result-row:hover {
+  transform: translateY(-2px);
+}
+
+.result-row__depart {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* --- Kartu jadwal marquee ---------------------------------------------- */
+.sched-card {
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)), var(--surface);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+
+.sched-card__time {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Ticker merek -------------------------------------------------------- */
+.brand-ticker {
+  background: #0a0a0c;
+}
+
+.brand-ticker__item {
+  letter-spacing: 0.08em;
+}
+
+/* --- Kartu rute: foto sinematik ----------------------------------------- */
+.route-card {
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.route-card__photo {
+  overflow: hidden;
+}
+
+.route-card__photo img {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.route-card:hover .route-card__photo img {
+  transform: scale(1.06);
+}
+
+.route-card__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(5, 5, 5, 0.45));
+  pointer-events: none;
+}
+
+.route-card__cities {
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* --- Kartu armada -------------------------------------------------------- */
+.fleet-card {
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.fleet-card__figure {
+  overflow: hidden;
+}
+
+.fleet-card__figure img {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fleet-card:hover .fleet-card__figure img {
+  transform: scale(1.05);
+}
+
+/* --- Fasilitas ------------------------------------------------------------ */
+.facility-card {
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent), var(--surface);
+}
+
+.facility-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.fact-card {
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(149, 255, 80, 0.06), transparent 55%), var(--surface-alt);
+}
+
+/* --- Pariwisata ------------------------------------------------------------ */
+.tourism {
+  position: relative;
+  isolation: isolate;
+}
+
+.tourism__contact {
+  border-radius: 20px;
+  position: sticky;
+  top: calc(var(--header-h) + 16px);
+}
+
+/* --- Footer ---------------------------------------------------------------- */
+.site-footer {
+  background: linear-gradient(180deg, #0a1510, var(--surface) 40%);
+}
+
+.site-footer__bottom {
+  gap: var(--sp-2);
+}
+
+/* --- Tombol & chip: sentuhan akhir ---------------------------------------- */
+.btn {
+  letter-spacing: 0;
+}
+
+.btn--accent {
+  box-shadow: 0 8px 24px rgba(149, 255, 80, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.btn--accent:hover:not(:disabled) {
+  box-shadow: 0 12px 30px rgba(149, 255, 80, 0.32), var(--shadow-sm);
+}
+
+.chip {
+  border-radius: var(--r-full);
+}
+
+.badge {
+  border-radius: var(--r-full);
+}
+
+/* --- Gambar: cegah geser layout ------------------------------------------- */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.route-card__photo img,
+.fleet-card__figure img {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Skeleton shimmer ------------------------------------------------------- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.07) 50%, transparent 70%);
+  animation: shimmer 1.6s infinite;
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}

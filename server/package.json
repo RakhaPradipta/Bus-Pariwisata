@@ -1,0 +1,25 @@
+{
+  "name": "po-bus-27-trans-app-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API server for PO Bus Jokam Trans.",
+  "type": "module",
+  "scripts": {
+    "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "smoke": "node --disable-warning=ExperimentalWarning server/smoke-test.js",
+    "seed": "node --disable-warning=ExperimentalWarning server/seed.js",
+    "seed:reset": "node --disable-warning=ExperimentalWarning server/seed.js --reset",
+    "lint": "eslint server"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.5.0"
+  }
+}

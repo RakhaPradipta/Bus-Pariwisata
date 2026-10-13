@@ -1,0 +1,174 @@
+/* ==========================================================================
+   Jokam Trans — Design tokens
+   Arah: "Panggung Malam" — tema gelap sinematik dengan aksen limau.
+   Acuan visual: Cinejoy (kanvas nyaris hitam #050505, teks putih berlapis
+   alfa, garis rambut putih tipis, radius pil, foto sebagai bintang utama).
+   Identitas hijau pinus Jokam Trans tetap dipertahankan sebagai bidang solid.
+
+   Aturan yang dijaga: bidang rata tanpa gradasi dekoratif, tanpa efek kaca,
+   dan setiap angka yang tampil berasal dari database atau basis pengetahuan
+   layanan — tidak ada angka karangan.
+
+   Catatan penting soal struktur warna:
+   - Tangga `--ink-50 … --ink-900` dibalik menghadap gelap: 50 = paling gelap
+     (kanvas), 900 = paling terang (judul & garis tegas). Dengan begitu seluruh
+     `border: 1px solid var(--line-strong)` yang lama otomatis jadi garis rambut
+     putih, sesuai bahasa visual acuan.
+   - Karena 900 kini terang, elemen yang dulu "chip gelap + teks putih" memakai
+     `--plate-bg`, dan teks di atas isian limau memakai `--on-accent`.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* --- Merek: hijau pinus lambung armada ------------------------------- */
+  --brand-50: #0d2419;
+  --brand-100: #133527;
+  --brand-200: #1b4a37;
+  --brand-300: #245f47;
+  --brand-400: #3f8266;
+  --brand-500: #1f6449;
+  --brand-600: #124d38;
+  --brand-700: #0c3c2c;
+  --brand-800: #082c20;
+  --brand-900: #051f16;
+  --brand-950: #03140e;
+
+  /* --- Aksen: limau (dari tema acuan) ---------------------------------- */
+  --accent-100: #e8ffd6;
+  --accent-200: #ccff9e;
+  --accent-300: #b2ff6e;
+  --accent-400: #95ff50;
+  --accent-500: #6fd92c;
+  --accent-600: #4ea61c;
+
+  /* --- Palet sengaja dibatasi: TIGA warna -------------------------------
+     Hitam (kanvas & bidang gelap), hijau pinus (identitas), limau (aksi &
+     sorotan). Tidak ada warna pendukung lain — perbedaan kelas armada dan
+     urutan daftar diungkapkan lewat bentuk, ikon, dan denah kursi, bukan
+     warna baru. */
+
+  /* --- Warna loket: kini memakai hijau pinus ----------------------------
+     Dulu tanah liat; dirapatkan agar tema tetap tiga warna. Dipakai untuk
+     tautan dan aksi kedua. */
+  --counter: var(--brand-400);
+  --counter-soft: var(--tint);
+  --counter-ink: var(--tint-fg);
+
+  /* Nada bawaan untuk elemen yang tidak diberi kelas nada. */
+  --tone: var(--accent-400);
+  --tone-soft: var(--tint-accent);
+  --tone-ink: var(--tint-accent-fg);
+  --tone-pop: var(--accent-400);
+
+  /* --- Netral: kanvas & cahaya -----------------------------------------
+     Dibalik menghadap gelap. 50 = kanvas, 900 = cahaya paling terang. */
+  --ink-50: #050505;
+  --ink-100: #0e0e11;
+  --ink-200: #1a1a20;
+  --ink-300: #2a2a33;
+  --ink-400: #6a6a76;
+  --ink-500: #8c8c98;
+  --ink-600: #a9a9b4;
+  --ink-700: #cbcbd4;
+  --ink-800: #e6e6ec;
+  --ink-900: #ffffff;
+  --white: #ffffff;
+
+  /* --- Status ----------------------------------------------------------- */
+  --success-50: #0c2a1c;
+  --success-500: #17875a;
+  --success-700: #74dda6;
+  --danger-50: #2c110e;
+  --danger-500: #d8452f;
+  --danger-700: #ff9c8b;
+  --warning-50: #2c2210;
+  --warning-500: #f0b429;
+
+  /* --- Bidang peran baru ------------------------------------------------
+     Dipakai untuk pasangan "bidang lembut + teks terang" dan "isian limau
+     + teks gelap"; memisahkan peran agar tangga warna tidak bentrok. */
+  --tint: #0f2a1e;
+  --tint-fg: #86ddb2;
+  --tint-line: #1e5a3e;
+  --tint-accent: #1c2a10;
+  --tint-accent-fg: #c9ff92;
+  --tint-accent-line: #3d6b1c;
+  --on-accent: #0a1403;
+  --plate-bg: #1e1e24;
+  --plate-fg: #ffffff;
+
+  /* --- Semantik --------------------------------------------------------- */
+  --bg: var(--ink-50);
+  --surface: #0e0e11;
+  --surface-alt: #17171b;
+  --surface-raised: #1e1e24;
+  --link: var(--accent-300);
+  --link-hover: var(--accent-200);
+  --field: var(--brand-800);
+  --field-deep: var(--brand-900);
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.24);
+  --text: var(--ink-700);
+  --text-muted: var(--ink-600);
+  --text-subtle: var(--ink-500);
+  --heading: var(--ink-900);
+  --on-field: rgba(255, 255, 255, 0.78);
+
+  /* Pita lambung armada — dipakai di header, kartu, dan tiket.
+     Tetap pita rata, bukan gradasi dekoratif. */
+  --livery: linear-gradient(
+    90deg,
+    var(--accent-400) 0 55%,
+    var(--white) 55% 74%,
+    rgba(255, 255, 255, 0.22) 74% 100%
+  );
+  --livery-on-dark: var(--livery);
+
+  /* --- Radius: mengikuti acuan (kartu membulat, elemen kecil jadi pil) -- */
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 10px;
+  --r-lg: 12px;
+  --r-xl: 14px;
+  --r-2xl: 18px;
+  --r-3xl: 24px;
+  --r-blob: 30px;
+  --r-full: 999px;
+
+  /* --- Bayangan: dalam dan lembut, khas panggung gelap.
+     Bukan lagi plat padat, karena plat hitam tidak terlihat di kanvas hitam. */
+  --shadow-xs: 0 1px 0 var(--line);
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.55);
+  --shadow-md: 0 10px 28px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.62);
+  --shadow-brand: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --shadow-plate: 0 16px 44px rgba(0, 0, 0, 0.66);
+  --shadow-tone: 0 10px 26px rgba(0, 0, 0, 0.55);
+  --shadow-tone-sm: 0 4px 14px rgba(0, 0, 0, 0.5);
+  /* Foto diberi bayangan paling dalam supaya terbaca sebagai objek. */
+  --shadow-photo: 0 20px 60px rgba(0, 0, 0, 0.7);
+  /* Sorot limau tipis untuk keadaan aktif. */
+  --glow-accent: 0 0 0 1px rgba(149, 255, 80, 0.4), 0 10px 30px rgba(149, 255, 80, 0.14);
+
+  /* --- Tipografi: mengikuti acuan (Inter + Montserrat) ----------------- */
+  --font-display: 'Montserrat', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  /* --- Jarak --- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+
+  --container: 1200px;
+  --header-h: 70px;
+}

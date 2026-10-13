@@ -1,0 +1,16 @@
+/* ==========================================================================
+   Jokam Trans — Entry stylesheet
+   Urutan import penting: token → primitif → layout → fitur → motif → foto →
+   admin → warna & gerak (lapisan terakhir, boleh menyetel ulang modul lain).
+
+   Catatan: motifs/photos/assistant/admin/play dibuat bersamaan dengan
+   halaman fiturnya masing-masing — impornya ditambahkan kembali di sini
+   saat file-nya sudah ada.
+   ========================================================================== */
+
+@import './styles/tokens.css';
+@import './styles/primitives.css';
+@import './styles/layout.css';
+@import './styles/features.css';
+@import './styles/redesign.css';
+@import './styles/responsive.css';
